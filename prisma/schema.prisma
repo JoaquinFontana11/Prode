@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Country {
+  id          Int        @id @default(autoincrement())
+  name  String  @db.VarChar
+  flag  String? @db.VarChar
+  Teams Teams[]
+}
+
+model Matches {
+  id          Int        @id @default(autoincrement())
+  localID                           Int      
+  visitorID                         Int
+  resultID                          Int
+  tournamentID                      Int
+  date                              DateTime     @db.Date
+  Teams_Matches_localIDToTeams      Teams        @relation("Matches_localIDToTeams", fields: [localID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "local")
+  Results_Matches_resultIDToResults Results?     @relation("Matches_resultIDToResults", fields: [resultID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "result")
+  Tournaments                       Tournaments? @relation(fields: [tournamentID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tournament")
+  Teams_Matches_visitorIDToTeams    Teams        @relation("Matches_visitorIDToTeams", fields: [visitorID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visitor")
+  Results_Results_matchIDToMatches  Results[]    @relation("Results_matchIDToMatches")
+}
+
+model Predictions {
+  id          Int        @id @default(autoincrement())
+  succesMatch  Boolean @default(false)
+  succesGoals  Boolean @default(false)
+  userID       Int
+  predictionID Int
+  Results      Results @relation(fields: [predictionID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "prediction")
+  Users        Users   @relation(fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user")
+}
+
+model Results {
+  id          Int        @id @default(autoincrement())
+  local                             Int?
+  visitor                           Int?
+  penalties                         Boolean       @default(false)
+  penalty_local                     Int?
+  penalty_visitor                   Int?
+  is_prediction                     Boolean       @default(false)
+  matchID                           Int
+  Matches_Matches_resultIDToResults Matches[]     @relation("Matches_resultIDToResults")
+  Predictions                       Predictions[]
+  Matches_Results_matchIDToMatches  Matches       @relation("Results_matchIDToMatches", fields: [matchID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "match")
+}
+
+model Teams {
+  id          Int        @id @default(autoincrement())
+  name                             String    @db.VarChar
+  acronym                          String    @db.VarChar
+  emblem                           String?   @db.VarChar
+  countryID                        Int
+  Matches_Matches_localIDToTeams   Matches[] @relation("Matches_localIDToTeams")
+  Matches_Matches_visitorIDToTeams Matches[] @relation("Matches_visitorIDToTeams")
+  Country                          Country   @relation(fields: [countryID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "country")
+}
+
+model Tournaments {
+    id          Int         @id(map: "Tournament_pkey") @default(autoincrement())
+  name       String       @db.VarChar
+  Matches    Matches[]
+  UserPoints UserPoints[]
+}
+
+model UserPoints {
+  id          Int        @id @default(autoincrement())
+  points       Int         @default(0)
+  tournamentID Int
+  userID       Int?     
+  Tournaments  Tournaments @relation(fields: [tournamentID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tournament")
+  Users        Users?      @relation(fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user")
+}
+
+model Users {
+  id          Int        @id @default(autoincrement())
+  username    String        @unique @db.VarChar
+  fullname    String        @db.VarChar
+  password    String        @db.VarChar
+  Predictions Predictions[]
+  UserPoints  UserPoints[]
+}
