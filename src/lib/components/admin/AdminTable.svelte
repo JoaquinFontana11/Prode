@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { PencilSquare, Trash } from 'svelte-heros-v2';
+
 	export let data;
-	console.log(data[0]);
+	export let tableName: string;
 
 	const transalteHeaders = {
 		name: 'Nombre',
@@ -47,12 +48,12 @@
 					{/if}
 				{/each}
 				<td class="table__body__row--actions">
-					<button class="action-button">
+					<a class="action-button" href={`${tableName}/${d.id}`}>
 						<PencilSquare size="20" color="blue" />
-					</button>
-					<button class="action-button">
+					</a>
+					<a class="action-button" href={`${tableName}/${d.id}/delete`}>
 						<Trash size="20" color="red" />
-					</button>
+					</a>
 				</td>
 			</tr>
 		{/each}

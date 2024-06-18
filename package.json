@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite dev",
+		"host": "vite dev --host",
 		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -34,6 +35,8 @@
 		"@prisma/client": "^5.15.0",
 		"@types/jsonwebtoken": "^9.0.6",
 		"bcrypt": "^5.1.1",
-		"jsonwebtoken": "^9.0.2"
+		"cl-editor": "^2.3.0",
+		"jsonwebtoken": "^9.0.2",
+		"svelte-loading-spinners": "^0.3.6"
 	}
 }
