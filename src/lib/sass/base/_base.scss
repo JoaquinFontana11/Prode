@@ -7,10 +7,29 @@
 }
 
 html {
+	height: 100%;
 	font-size: 62.5%;
 }
 
 body {
-	padding: 3rem;
+	height: 100%;
 	box-sizing: border-box;
+}
+
+button {
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+}
+
+.layout {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 5rem;
+}
+
+.flex-col {
+	display: flex;
+	flex-direction: column;
 }

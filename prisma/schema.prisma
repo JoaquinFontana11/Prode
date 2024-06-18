@@ -15,12 +15,13 @@ model Country {
 }
 
 model Matches {
-  id          Int        @id @default(autoincrement())
+  id                                Int        @id @default(autoincrement())
   localID                           Int      
   visitorID                         Int
   resultID                          Int
   tournamentID                      Int
   date                              DateTime     @db.Date
+  phase                             Phases       @default(Grupos)
   Teams_Matches_localIDToTeams      Teams        @relation("Matches_localIDToTeams", fields: [localID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "local")
   Results_Matches_resultIDToResults Results?     @relation("Matches_resultIDToResults", fields: [resultID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "result")
   Tournaments                       Tournaments? @relation(fields: [tournamentID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tournament")
@@ -64,8 +65,9 @@ model Teams {
 }
 
 model Tournaments {
-    id          Int         @id(map: "Tournament_pkey") @default(autoincrement())
+  id          Int         @id(map: "Tournament_pkey") @default(autoincrement())
   name       String       @db.VarChar
+  active     Boolean      @default(true)
   Matches    Matches[]
   UserPoints UserPoints[]
 }
@@ -84,6 +86,21 @@ model Users {
   username    String        @unique @db.VarChar
   fullname    String        @db.VarChar
   password    String        @db.VarChar
+  role        Roles         @default(USER)
   Predictions Predictions[]
   UserPoints  UserPoints[]
+}
+
+enum Phases {
+  Grupos
+  Octavos
+  Cuartos
+  Semi
+  Final
+
+}
+
+enum Roles {
+  USER
+  ADMIN
 }
