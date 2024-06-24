@@ -1,0 +1,22 @@
+.absolute-box {
+	position: absolute;
+	z-index: 30;
+	text-align: center;
+	left: 10%;
+	top: 7%;
+}
+
+.create-btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 8rem;
+	height: 8rem;
+
+	background-color: #4338ca;
+	border-radius: 100000px;
+
+	&:hover {
+		background-color: #4031e4;
+	}
+}

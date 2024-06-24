@@ -5,7 +5,6 @@ import prisma from '$lib/prisma';
 import { JWT_PRIVATE_KEY, NODE_ENV } from '$env/static/private';
 
 const login = async ({ cookies, request }) => {
-	console.log('entrandoooo');
 	const data = Object.fromEntries(await request.formData());
 
 	if (!data.username || !data.password)
@@ -38,7 +37,6 @@ const login = async ({ cookies, request }) => {
 };
 
 const logout = async ({ cookies }) => {
-	console.log('saliendooooooo');
 	cookies.delete('jwt', {
 		path: '/',
 		httpOnly: true,

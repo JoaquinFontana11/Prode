@@ -13,6 +13,4 @@
 </script>
 
 <DropdownMenu show={showDropdownMenu} on:closeMenu={switchMenu} admin={true} />
-<section class="layout">
-	<slot />
-</section>
+<slot />

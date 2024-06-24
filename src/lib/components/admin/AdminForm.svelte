@@ -26,13 +26,10 @@
 	};
 </script>
 
-<form
-	class="flex flex-col gap-3 bg-gray-200 dark:bg-gray-800 p-10 mb-5"
-	on:submit|preventDefault={handlerSubmit}
->
+<form class="form-data" on:submit|preventDefault={handlerSubmit}>
 	<!-- Dejamos un slot para ampliar la funcionalidad del formulario dependiendo la necesidad -->
 	<slot name="top-slot" />
-	<legend class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">{title}</legend>
+	<legend class="form-data__title">{title}</legend>
 	{#each components as component}
 		{#if component.type == 'text'}
 			<AdminFormInputText
@@ -76,9 +73,7 @@
 		{/if}
 	{/each}
 	<slot name="bottom-slot" />
-	<button
-		class="w-full m-0 focus:outline-none text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-900 flex justify-center"
-	>
+	<button class="	form-data__btn-submit">
 		{#if loading}
 			<Spinner />
 		{:else}

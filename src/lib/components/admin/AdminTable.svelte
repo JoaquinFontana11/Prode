@@ -17,7 +17,15 @@
 	const tableHeadersTranslate = tableHeaders.map(
 		(header) => transalteHeaders[header as keyof typeof transalteHeaders]
 	);
-	console.log(tableHeaders);
+
+	const deleteButton = async (id: string) => {
+		console.log('HOLA QE TAL');
+		const res = await fetch(`${tableName}/${id}?/delete`, {
+			method: 'POST',
+			body: new FormData()
+		});
+		console.log(res);
+	};
 </script>
 
 <table class="table">
@@ -51,9 +59,15 @@
 					<a class="action-button" href={`${tableName}/${d.id}`}>
 						<PencilSquare size="20" color="blue" />
 					</a>
-					<a class="action-button" href={`${tableName}/${d.id}/delete`}>
+					<button
+						class="action-button"
+						on:click={(e) => {
+							e.preventDefault();
+							deleteButton(d.id);
+						}}
+					>
 						<Trash size="20" color="red" />
-					</a>
+					</button>
 				</td>
 			</tr>
 		{/each}

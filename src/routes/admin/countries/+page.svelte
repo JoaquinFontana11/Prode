@@ -5,4 +5,6 @@
 	export let data: PageData;
 </script>
 
-<TableData data={data.countries} />
+<section class="layout">
+	<TableData data={data.countries} tableName="country" />
+</section>

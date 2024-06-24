@@ -20,7 +20,7 @@
 		message: 'message-error'
 	};
 
-	let styleInput = `input-form`;
+	let styleInput = `input-form input-form--flex`;
 	let styleMessage = 'hidden';
 	let errorMsg = '';
 

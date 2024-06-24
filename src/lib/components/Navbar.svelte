@@ -21,7 +21,6 @@
 			method: 'POST',
 			body: JSON.stringify(user)
 		});
-		console.log(res);
 		goto('/login');
 	};
 </script>

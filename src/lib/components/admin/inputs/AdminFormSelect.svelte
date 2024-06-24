@@ -4,7 +4,7 @@
 	export let value: string | number | Date | boolean;
 	export let label: string;
 	export let required = false;
-	export let options: any;
+	export let options: any[];
 	export let disabled: boolean = false;
 
 	const succes = {

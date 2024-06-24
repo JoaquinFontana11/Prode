@@ -1,7 +1,7 @@
 .table {
 	background-color: $third-gray;
 	margin-bottom: 5rem;
-	border-radius: 3rem;
+	border-radius: 3rem 3rem 0 0;
 	width: 60vw;
 
 	table-layout: fixed;
@@ -26,6 +26,7 @@
 			&:nth-child(even) {
 				background-color: $fourth-gray;
 			}
+
 			&--img img {
 				width: 5rem;
 				margin: 1rem;

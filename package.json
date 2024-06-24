@@ -37,6 +37,7 @@
 		"bcrypt": "^5.1.1",
 		"cl-editor": "^2.3.0",
 		"jsonwebtoken": "^9.0.2",
+		"svelte-french-toast": "^1.2.0",
 		"svelte-loading-spinners": "^0.3.6"
 	}
 }

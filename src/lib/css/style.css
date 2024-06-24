@@ -150,7 +150,7 @@ button {
 .table {
   background-color: #bbbbbb;
   margin-bottom: 5rem;
-  border-radius: 3rem;
+  border-radius: 3rem 3rem 0 0;
   width: 60vw;
   table-layout: fixed;
   border-collapse: separate;
@@ -188,21 +188,15 @@ button {
 }
 .input-flex__label {
   display: block;
-  margin-bottom: 2rem;
-  color: #808080;
-  text-align: left;
+  margin-bottom: 1.5rem;
+  color: #707070;
+  font-size: 1.7rem;
   width: 100%;
 }
 
-.input-box svg {
-  margin-bottom: 1rem;
-  width: 3rem;
-  height: 5rem;
-  color: #bbbbbb;
-}
 .input-box__placeholder {
-  margin-bottom: 2rem;
-  color: #bbbbbb;
+  margin-bottom: 1rem;
+  color: #808080;
 }
 .input-box__filename {
   font-size: 1rem;
@@ -212,21 +206,32 @@ button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 5rem;
-  padding-bottom: 6rem;
+  padding-top: 2rem;
+  padding-bottom: 2.5rem;
+}
+.input-box--img svg {
+  display: block;
+  margin-bottom: 1rem;
+  width: 5rem;
+  height: 5rem;
+  color: #bbbbbb;
 }
 
 .input-form {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background-color: white;
+  border: 1px dashed #bbbbbb;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.input-form--flex {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 7rem;
-  background-color: #e9e9e9;
-  border: 2px dashed #bbbbbb;
-  border-radius: 0.5rem;
-  cursor: pointer;
+  border-width: 2px;
 }
 .input-form--error {
   background-color: rgb(254, 242, 242);
@@ -246,6 +251,7 @@ button {
 .message-error {
   display: block;
   color: rgb(239, 68, 68);
+  font-size: 1.7rem;
   margin-bottom: 1rem;
 }
 
@@ -260,7 +266,61 @@ button {
   height: auto;
 }
 
+.form-data {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: #e9e9e9;
+  padding: 3rem;
+  margin-bottom: 2rem;
+  border-radius: 1rem;
+}
+.form-data__title {
+  display: block;
+  margin-bottom: 1rem;
+  color: black;
+  font-size: 1.7rem;
+}
+.form-data__btn-submit {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+  color: white;
+  background-color: #4338ca;
+  border-radius: 2rem;
+  padding: 2rem 1rem;
+}
+.form-data__btn-submit:hover {
+  background-color: #4031e4;
+}
+
+.absolute-box {
+  position: absolute;
+  z-index: 30;
+  text-align: center;
+  left: 10%;
+  top: 7%;
+}
+
+.create-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 8rem;
+  height: 8rem;
+  background-color: #4338ca;
+  border-radius: 100000px;
+}
+.create-btn:hover {
+  background-color: #4031e4;
+}
+
 .admin__section {
+  width: 75%;
+  height: 75%;
+}
+.admin__section--flex {
   display: flex;
   align-items: center;
 }
