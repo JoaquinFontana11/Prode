@@ -1,75 +1,74 @@
 <script lang="ts">
-	import { PencilSquare, Trash } from 'svelte-heros-v2';
+	import { createEventDispatcher, type ComponentType } from 'svelte';
+	import AdminListRow from './AdminListRow.svelte';
 
-	export let data;
-	export let tableName: string;
+	export let data: any[];
+	export let headers: string[];
+	export let attributes: string[];
+	export let actions: string[] = ['edit', 'delete'];
+	export let caption: string = '';
+	export let customRow: ComponentType | null = null; // podemos pasar una fila customizada si la tabla tiene que ser distinta
+	export let filterConfig: { show: boolean; placeholder: string };
 
-	const transalteHeaders = {
-		name: 'Nombre',
-		acronym: 'Acronimo',
-		emblem: 'Escudo',
-		Country: 'Pais',
-		flag: 'Bandera'
+	const dispatch = createEventDispatcher();
+	let filter: string = '';
+
+	const deleteEvent = (e: CustomEvent) => {
+		dispatch('delete-doc', { id: e.detail.id, doc: e.detail.doc });
 	};
 
-	let tableHeaders = Object.keys(data[0]);
-	tableHeaders = tableHeaders.filter((item) => item !== 'id' && item !== 'countryID');
-	const tableHeadersTranslate = tableHeaders.map(
-		(header) => transalteHeaders[header as keyof typeof transalteHeaders]
-	);
-
-	const deleteButton = async (id: string) => {
-		console.log('HOLA QE TAL');
-		const res = await fetch(`${tableName}/${id}?/delete`, {
-			method: 'POST',
-			body: new FormData()
-		});
-		console.log(res);
+	const modifyEvent = (e: CustomEvent) => {
+		dispatch('modify-doc', { id: e.detail.id, doc: e.detail.doc });
 	};
 </script>
 
-<table class="table">
-	<thead class="table__head">
-		<tr class="table__head__row">
-			{#each tableHeadersTranslate as header}
-				<th class="table__head__row--text">{header}</th>
-			{/each}
-			<th class="table__head__row--text">Acciones</th>
-		</tr>
+<div class="header-box">
+	<span class="header-box__title">{caption}</span>
+	{#if filterConfig.show}
+		<input
+			class="header-box__filter"
+			type="text"
+			placeholder={filterConfig.placeholder}
+			bind:value={filter}
+		/>
+	{/if}
+</div>
+<table class="table-list">
+	<thead class="table-list__head">
+		{#each headers as header}
+			<th
+				class="table-list__head__row"
+				class:table-list__head__row--width={['Imagen', 'Icono', 'Fecha', 'Direccion'].includes(
+					header
+				)}
+			>
+				{header}
+			</th>
+		{/each}
+		<th class="table-list__head__row table-list__head__row--width">Acciones</th>
 	</thead>
-	<tbody class="table__body">
-		{#each data as d}
-			<tr class="table__body__row">
-				{#each tableHeaders as header}
-					{#if header === 'emblem' || header === 'flag'}
-						<td class="table__body__row--img">
-							<img src={d[header]} alt="escudo" />
-						</td>
-					{:else if header === 'Country'}
-						<td class="table__body__row--country">
-							{d[header].name}
-						</td>
-					{:else}
-						<td class="table__body__row--text">
-							{d[header]}
-						</td>
-					{/if}
-				{/each}
-				<td class="table__body__row--actions">
-					<a class="action-button" href={`${tableName}/${d.id}`}>
-						<PencilSquare size="20" color="blue" />
-					</a>
-					<button
-						class="action-button"
-						on:click={(e) => {
-							e.preventDefault();
-							deleteButton(d.id);
-						}}
-					>
-						<Trash size="20" color="red" />
-					</button>
-				</td>
-			</tr>
+	<tbody class="table-list__body">
+		{#each data.filter((d) => filterConfig.show && d.name
+					.toLowerCase()
+					.includes(filter.toLowerCase())) as doc}
+			{#if !customRow}
+				<AdminListRow
+					{doc}
+					{attributes}
+					on:modify-doc={modifyEvent}
+					on:delete-doc={deleteEvent}
+					{actions}
+				/>
+			{:else}
+				<svelte:component
+					this={customRow}
+					{doc}
+					{attributes}
+					on:modify-doc={modifyEvent}
+					on:delete-doc={deleteEvent}
+					{actions}
+				/>
+			{/if}
 		{/each}
 	</tbody>
 </table>

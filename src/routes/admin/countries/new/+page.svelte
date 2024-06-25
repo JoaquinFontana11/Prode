@@ -6,26 +6,16 @@
 
 	export let data: PageData;
 
-	const countries = data.countries;
 	let loading = false;
 
 	const components: any[] = [
 		{ type: 'text', name: 'name', label: 'Nombre', value: '', required: true },
-		{ type: 'text', name: 'acronym', label: 'Acronimo', value: '', required: true },
-		{ type: 'image', name: 'emblem', label: 'Escudo', value: '', required: false },
-		{
-			type: 'select',
-			label: 'Pais',
-			name: 'countryID',
-			value: '',
-			required: true,
-			options: countries
-		}
+		{ type: 'image', name: 'flag', label: 'Bandera', value: '', required: false }
 	];
 
-	const createTeam = async (e: CustomEvent) => {
+	const createCountry = async (e: CustomEvent) => {
 		const { data } = e.detail;
-		const image = data[2].value;
+		const image = data[1].value;
 
 		const reader = new FileReader();
 		reader.readAsDataURL(image[0]);
@@ -37,18 +27,16 @@
 			const formData = new FormData();
 
 			formData.append('name', data[0].value);
-			formData.append('acronym', data[1].value);
-			formData.append('countryID', data[3].value);
-			formData.append('emblem', imgData[1]);
+			formData.append('flag', imgData[1]);
 
 			const res = await fetch('?/create', {
 				method: 'POST',
 				body: formData
 			});
 			if (res.status === 200) {
-				toast.success('Se creo el equipo');
+				toast.success('Se creo el pais');
 				setTimeout(() => {
-					goto('/admin/teams');
+					goto('/admin/countries');
 				}, 1000);
 			} else {
 				toast.error('Ocurrio un error con el servidor');
@@ -61,11 +49,11 @@
 <main class="layout">
 	<div class="admin__section">
 		<AdminForm
-			title="Nuevo Equipo"
+			title="Nuevo Pais"
 			{components}
 			submitMessage="Crear"
 			{loading}
-			on:custom-submit={createTeam}
+			on:custom-submit={createCountry}
 		/>
 	</div>
 </main>

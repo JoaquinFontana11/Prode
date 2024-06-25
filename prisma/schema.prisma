@@ -8,29 +8,29 @@ datasource db {
 }
 
 model Country {
-  id          Int        @id @default(autoincrement())
+  id    Int     @id @default(autoincrement())
   name  String  @db.VarChar
   flag  String? @db.VarChar
   Teams Teams[]
 }
 
 model Matches {
-  id                                Int        @id @default(autoincrement())
-  localID                           Int      
+  id                                Int         @id @default(autoincrement())
+  localID                           Int
   visitorID                         Int
-  resultID                          Int
+  resultID                          Int?
   tournamentID                      Int
-  date                              DateTime     @db.Date
-  phase                             Phases       @default(Grupos)
-  Teams_Matches_localIDToTeams      Teams        @relation("Matches_localIDToTeams", fields: [localID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "local")
-  Results_Matches_resultIDToResults Results?     @relation("Matches_resultIDToResults", fields: [resultID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "result")
-  Tournaments                       Tournaments? @relation(fields: [tournamentID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tournament")
-  Teams_Matches_visitorIDToTeams    Teams        @relation("Matches_visitorIDToTeams", fields: [visitorID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visitor")
-  Results_Results_matchIDToMatches  Results[]    @relation("Results_matchIDToMatches")
+  date                              DateTime    @db.Date
+  phase                             Phases      @default(Grupos)
+  Teams_Matches_localIDToTeams      Teams       @relation("Matches_localIDToTeams", fields: [localID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "local")
+  Results_Matches_resultIDToResults Results?    @relation("Matches_resultIDToResults", fields: [resultID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "result")
+  Tournaments                       Tournaments @relation(fields: [tournamentID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tournament")
+  Teams_Matches_visitorIDToTeams    Teams       @relation("Matches_visitorIDToTeams", fields: [visitorID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "visitor")
+  Results_Results_matchIDToMatches  Results[]   @relation("Results_matchIDToMatches")
 }
 
 model Predictions {
-  id          Int        @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   succesMatch  Boolean @default(false)
   succesGoals  Boolean @default(false)
   userID       Int
@@ -40,7 +40,7 @@ model Predictions {
 }
 
 model Results {
-  id          Int        @id @default(autoincrement())
+  id                                Int           @id @default(autoincrement())
   local                             Int?
   visitor                           Int?
   penalties                         Boolean       @default(false)
@@ -54,7 +54,7 @@ model Results {
 }
 
 model Teams {
-  id          Int        @id @default(autoincrement())
+  id                               Int       @id @default(autoincrement())
   name                             String    @db.VarChar
   acronym                          String    @db.VarChar
   emblem                           String?   @db.VarChar
@@ -65,7 +65,7 @@ model Teams {
 }
 
 model Tournaments {
-  id          Int         @id(map: "Tournament_pkey") @default(autoincrement())
+  id         Int          @id(map: "Tournament_pkey") @default(autoincrement())
   name       String       @db.VarChar
   active     Boolean      @default(true)
   Matches    Matches[]
@@ -73,20 +73,20 @@ model Tournaments {
 }
 
 model UserPoints {
-  id          Int        @id @default(autoincrement())
+  id           Int         @id @default(autoincrement())
   points       Int         @default(0)
   tournamentID Int
-  userID       Int?     
+  userID       Int?
   Tournaments  Tournaments @relation(fields: [tournamentID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "tournament")
   Users        Users?      @relation(fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user")
 }
 
 model Users {
-  id          Int        @id @default(autoincrement())
-  username    String        @unique @db.VarChar
-  fullname    String        @db.VarChar
+  id          Int           @id @default(autoincrement())
   password    String        @db.VarChar
   role        Roles         @default(USER)
+  name        String        @unique @db.VarChar
+  username    String        @unique @db.VarChar
   Predictions Predictions[]
   UserPoints  UserPoints[]
 }
@@ -97,7 +97,6 @@ enum Phases {
   Cuartos
   Semi
   Final
-
 }
 
 enum Roles {

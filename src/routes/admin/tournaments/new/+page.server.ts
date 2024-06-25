@@ -4,14 +4,13 @@ import { NODE_ENV } from '$env/static/private';
 import prisma from '$lib/prisma';
 import { createUrlImg } from '$lib/components/helpers/FormateImage';
 
+const stringToBooleanMap = {
+	true: true,
+	false: false
+};
+
 export const load: PageServerLoad = async ({ request }) => {
-	let countries = await prisma.country.findMany();
-
-	countries = countries.map((country) => {
-		return { value: country.id, name: country.name };
-	});
-
-	return { countries };
+	return {};
 };
 
 export const actions = {
@@ -21,16 +20,14 @@ export const actions = {
 			console.log(request);
 			console.log(form);
 
-			const team = {
+			const tournament = {
 				name: form.get('name') + '',
-				acronym: form.get('acronym') + '',
-				countryID: form.get('countryID') * 1,
-				emblem: createUrlImg(form.get('name') + '', form.get('emblem') + '', NODE_ENV, 'emblems')
+				active: stringToBooleanMap[form.get('active')]
 			};
-			console.log(team);
+			console.log(tournament);
 
-			const res = await prisma.teams.create({
-				data: team
+			const res = await prisma.tournaments.create({
+				data: tournament
 			});
 			return { status: 200 };
 		} catch (e) {

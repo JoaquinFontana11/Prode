@@ -5,13 +5,7 @@ import prisma from '$lib/prisma';
 import { createUrlImg } from '$lib/components/helpers/FormateImage';
 
 export const load: PageServerLoad = async ({ request }) => {
-	let countries = await prisma.country.findMany();
-
-	countries = countries.map((country) => {
-		return { value: country.id, name: country.name };
-	});
-
-	return { countries };
+	return {};
 };
 
 export const actions = {
@@ -21,16 +15,19 @@ export const actions = {
 			console.log(request);
 			console.log(form);
 
-			const team = {
+			const country = {
 				name: form.get('name') + '',
-				acronym: form.get('acronym') + '',
-				countryID: form.get('countryID') * 1,
-				emblem: createUrlImg(form.get('name') + '', form.get('emblem') + '', NODE_ENV, 'emblems')
+				flag: createUrlImg(
+					`flag_${form.get('name')}` + '',
+					form.get('countries') + '',
+					NODE_ENV,
+					'flags'
+				)
 			};
-			console.log(team);
+			console.log(country);
 
-			const res = await prisma.teams.create({
-				data: team
+			const res = await prisma.country.create({
+				data: country
 			});
 			return { status: 200 };
 		} catch (e) {

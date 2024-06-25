@@ -1,35 +1,56 @@
-.table {
-	background-color: $third-gray;
-	margin-bottom: 5rem;
-	border-radius: 3rem 3rem 0 0;
-	width: 60vw;
+@import 'listRow';
 
+.header-box {
+	display: flex;
+	justify-content: space-between;
+	width: 50%;
+	min-width: 50%;
+	max-width: 50%;
+	font-size: $normal-font-size;
+	color: $primary-gray;
+	padding-bottom: 2rem;
+
+	&__title {
+		font-size: $big-font-size;
+	}
+
+	&__filter {
+		width: 20rem;
+		padding: 1rem;
+		font-size: $small-font-size;
+		color: black;
+		border: none;
+		border-bottom: 2px solid $primary-blue;
+		border-radius: 10rem;
+		outline: 2px solid transparent;
+		outline-offset: 2px;
+		transition-duration: 300ms;
+	}
+}
+
+.table-list {
+	display: table;
 	table-layout: fixed;
-	border-collapse: separate;
-	border-spacing: 0 1rem;
+	width: 60%;
+	margin-bottom: 20rem;
+	text-align: center;
+	color: $primary-gray;
+	box-shadow:
+		0 4px 6px -1px rgb(0 0 0 / 0.1),
+		0 2px 4px -2px rgb(0 0 0 / 0.1);
 
 	&__head {
-		font-size: $big-font-size;
-		&__row {
-			&--text {
-				text-align: center;
-				vertical-align: middle;
-				border-bottom: 2px solid $third-black; // Mover el borde aquí
-			}
-		}
-	}
-	&__body {
-		font-size: $normal-font-size;
-		&__row {
-			text-align: center;
-			vertical-align: middle;
-			&:nth-child(even) {
-				background-color: $fourth-gray;
-			}
+		font-size: $small-font-size;
+		color: $second-gray;
+		text-transform: uppercase;
+		background-color: rgb(249 250 251);
 
-			&--img img {
-				width: 5rem;
-				margin: 1rem;
+		&__row {
+			padding: 1rem 2rem;
+			text-align: center;
+
+			&--width {
+				width: 20rem;
 			}
 		}
 	}
