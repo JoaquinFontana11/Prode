@@ -6,22 +6,33 @@ import { createUrlImg } from '$lib/components/helpers/FormateImage';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const id = params.id * 1;
-	const team = await prisma.teams.findUnique({
+	const match = await prisma.matches.findUnique({
 		where: {
 			id: id
 		},
 		include: {
-			Country: true
+			Teams_Matches_localIDToTeams: true,
+			Teams_Matches_visitorIDToTeams: true,
+			Tournaments: true,
+			Results_Results_matchIDToMatches: true
 		}
 	});
 
-	let countries = await prisma.country.findMany();
+	let teams = await prisma.teams.findMany();
 
-	countries = countries.map((country) => {
-		return { value: country.id, name: country.name };
+	teams = teams.map((team) => {
+		return { value: team.id, name: team.name };
 	});
 
-	return { team, countries };
+	let tournaments = await prisma.tournaments.findMany();
+
+	tournaments = tournaments.map((tournament) => {
+		return { value: tournament.id, name: tournament.name };
+	});
+
+	if (match) match.date.setHours(30);
+
+	return { match, teams, tournaments };
 };
 
 export const actions = {
@@ -29,35 +40,28 @@ export const actions = {
 		try {
 			const form = await request.formData();
 
-			const team = {
-				name: form.get('name') + '',
-				acronym: form.get('acronym') + '',
-				countryID: form.get('countryID') * 1,
-				emblem: form.get('emblem').toString().includes('/img/emblems/')
-					? form.get('emblem')
-					: createUrlImg(form.get('name') + '', form.get('emblem') + '', NODE_ENV, 'emblems')
+			const match = {
+				tournamentID: form.get('tournamentID') * 1,
+				localID: form.get('localID') * 1,
+				visitorID: form.get('visitorID') * 1,
+				phase: form.get('phase') + '',
+				date: new Date(form.get('date'))
 			};
 
-			const res = await prisma.teams.update({
+			console.log(match);
+			match.date.setHours(30);
+			console.log(match);
+
+			const res = await prisma.matches.update({
 				where: {
 					id: form.get('id') * 1
 				},
-				data: team
+				data: match
 			});
 			return { status: 200 };
 		} catch (e) {
+			console.log(e);
 			throw error(500, e);
 		}
-	},
-	delete: async ({ params }) => {
-		const id = params.id * 1;
-
-		const team = await prisma.teams.delete({
-			where: {
-				id: id
-			}
-		});
-
-		console.log(team);
 	}
 };

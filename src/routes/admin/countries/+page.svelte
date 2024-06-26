@@ -7,7 +7,7 @@
 
 	export let data: PageData;
 	const countries = data.countries;
-	console.log(countries);
+
 	const headers = ['Nombre', 'Bandera'];
 	const attributes = ['name', 'flag'];
 

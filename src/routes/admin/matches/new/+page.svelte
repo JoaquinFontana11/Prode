@@ -6,54 +6,82 @@
 
 	export let data: PageData;
 
-	const countries = data.countries;
+	const teams = data.teams;
+	const tournaments = data.tournaments;
 	let loading = false;
 
 	const components: any[] = [
-		{ type: 'text', name: 'name', label: 'Nombre', value: '', required: true },
-		{ type: 'text', name: 'acronym', label: 'Acronimo', value: '', required: true },
-		{ type: 'image', name: 'emblem', label: 'Escudo', value: '', required: false },
 		{
 			type: 'select',
-			label: 'Pais',
-			name: 'countryID',
+			label: 'Torneo',
+			name: 'tournamentID',
 			value: '',
 			required: true,
-			options: countries
+			options: tournaments
+		},
+		{
+			type: 'select',
+			label: 'Local',
+			name: 'localID',
+			value: '',
+			required: true,
+			options: teams
+		},
+		{
+			type: 'select',
+			label: 'Visitante',
+			name: 'visitorID',
+			value: '',
+			required: true,
+			options: teams
+		},
+		{
+			type: 'select',
+			label: 'Fase',
+			name: 'phase',
+			value: '',
+			required: true,
+			options: [
+				{ value: 'Grupos', name: 'Fase de Grupos' },
+				{ value: 'Octavos', name: 'Octavos de final' },
+				{ value: 'Cuartos', name: 'Cuartos de final' },
+				{ value: 'Semi', name: 'Semifinal' },
+				{ value: 'TerCua', name: 'Tercero y Cuarto' },
+				{ value: 'Final', name: 'Final' }
+			]
+		},
+		{
+			type: 'date',
+			name: 'date',
+			label: 'Dia',
+			value: '',
+			required: true
 		}
 	];
-
-	const createTeam = async (e: CustomEvent) => {
+	const createMatch = async (e: CustomEvent) => {
 		const { data } = e.detail;
-		const image = data[2].value;
 
-		const reader = new FileReader();
-		reader.readAsDataURL(image[0]);
-		reader.onload = async (e) => {
-			const target = e.target as FileReader;
-			const FileReaderResult = target.result as string;
-			const imgData = FileReaderResult.split(',');
+		const formData = new FormData();
 
-			const formData = new FormData();
+		formData.append('tournamentID', data[0].value);
+		formData.append('localID', data[1].value);
+		formData.append('visitorID', data[2].value);
+		formData.append('phase', data[3].value);
+		formData.append('date', data[4].value);
 
-			formData.append('name', data[0].value);
-			formData.append('acronym', data[1].value);
-			formData.append('countryID', data[3].value);
-			formData.append('emblem', imgData[1]);
-
-			const res = await fetch('?/create', {
-				method: 'POST',
-				body: formData
-			});
-			if (res.status === 200) {
-				toast.success('Se creo el equipo');
-				setTimeout(() => {
-					goto('/admin/teams');
-				}, 1000);
-			} else {
-				toast.error('Ocurrio un error con el servidor');
-			}
-		};
+		const res = await fetch('?/create', {
+			method: 'POST',
+			body: formData
+		});
+		if (res.status === 200) {
+			toast.success('Se creo el partido');
+			setTimeout(() => {
+				goto('/admin/matches');
+			}, 1000);
+		} else {
+			console.log(res);
+			toast.error('Ocurrio un error con el servidor');
+		}
 	};
 </script>
 
@@ -61,11 +89,11 @@
 <main class="layout">
 	<div class="admin__section">
 		<AdminForm
-			title="Nuevo Equipo"
+			title="Nuevo Partido"
 			{components}
 			submitMessage="Crear"
 			{loading}
-			on:custom-submit={createTeam}
+			on:custom-submit={createMatch}
 		/>
 	</div>
 </main>

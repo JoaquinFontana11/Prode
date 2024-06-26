@@ -43,7 +43,12 @@
 			emblem: team.emblem,
 			country: team.Country.name
 		}))}
-		filterConfig={{ show: true, placeholder: 'Buscar un Equipo' }}
+		filterConfig={{
+			showSearcher: true,
+			showSelect: false,
+			placeholder: 'Buscar un Equipo',
+			options: []
+		}}
 		on:delete-doc={deleteTeam}
 		on:modify-doc={modifyTeam}
 		caption="Equipos"

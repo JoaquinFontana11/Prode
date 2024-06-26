@@ -48,7 +48,5 @@ export const actions = {
 				id: id
 			}
 		});
-
-		console.log(country);
 	}
 };

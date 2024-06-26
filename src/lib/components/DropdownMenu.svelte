@@ -19,6 +19,7 @@
 				<a href="/admin/matches">Partidos</a>
 				<a href="/admin/countries">Paises</a>
 				<a href="/admin/teams">Equipos</a>
+				<a href="/admin/results">Resultados</a>
 			</div>
 			<a href="/">Salir</a>
 		{:else}

@@ -49,7 +49,5 @@ export const actions = {
 				id: id
 			}
 		});
-
-		console.log(tournament);
 	}
 };

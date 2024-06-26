@@ -14,17 +14,27 @@
 		font-size: $big-font-size;
 	}
 
-	&__filter {
-		width: 20rem;
-		padding: 1rem;
-		font-size: $small-font-size;
-		color: black;
-		border: none;
-		border-bottom: 2px solid $primary-blue;
-		border-radius: 10rem;
-		outline: 2px solid transparent;
-		outline-offset: 2px;
-		transition-duration: 300ms;
+	&__filters-box {
+		display: flex;
+		flex-direction: row;
+		gap: 1rem;
+
+		&__filter {
+			width: auto;
+			padding: 1rem;
+			font-size: $small-font-size;
+			color: black;
+			border: none;
+			border-bottom: 2px solid $primary-blue;
+			border-radius: 10rem;
+			outline: 2px solid transparent;
+			outline-offset: 2px;
+			transition-duration: 300ms;
+
+			&--width {
+				width: 20rem;
+			}
+		}
 	}
 }
 

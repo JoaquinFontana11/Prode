@@ -3,81 +3,88 @@
 	import AdminForm from '$lib/components/admin/AdminForm.svelte';
 	import { goto } from '$app/navigation';
 	import toast, { Toaster } from 'svelte-french-toast';
+	import { setDate } from '$lib/components/helpers/FormateDate';
 
 	export let data: PageData;
 
-	const team = data.team;
-	const countries = data.countries;
+	const match = data.match;
+	const teams = data.teams;
+	const tournaments = data.tournaments;
 	let loading = false;
 
 	const components: any[] = [
-		{ type: 'text', name: 'name', label: 'Nombre', value: team?.name, required: true },
-		{ type: 'text', name: 'acronym', label: 'Acronimo', value: team?.acronym, required: true },
-		{ type: 'image', name: 'emblem', label: 'Escudo', value: '', required: false },
 		{
 			type: 'select',
-			label: 'Pais',
-			name: 'countryID',
-			value: team?.countryID,
+			label: 'Torneo',
+			name: 'tournamentID',
+			value: match?.tournamentID,
 			required: true,
-			options: countries
+			options: tournaments
+		},
+		{
+			type: 'select',
+			label: 'Local',
+			name: 'localID',
+			value: match?.localID,
+			required: true,
+			options: teams
+		},
+		{
+			type: 'select',
+			label: 'Visitante',
+			name: 'visitorID',
+			value: match?.visitorID,
+			required: true,
+			options: teams
+		},
+		{
+			type: 'select',
+			label: 'Fase',
+			name: 'phase',
+			value: match?.phase,
+			required: true,
+			options: [
+				{ value: 'Grupos', name: 'Fase de Grupos' },
+				{ value: 'Octavos', name: 'Octavos de final' },
+				{ value: 'Cuartos', name: 'Cuartos de final' },
+				{ value: 'Semi', name: 'Semifinal' },
+				{ value: 'TerCua', name: 'Tercero y Cuarto' },
+				{ value: 'Final', name: 'Final' }
+			]
+		},
+		{
+			type: 'date',
+			name: 'date',
+			label: 'Dia',
+			value: setDate(match?.date!),
+			required: true
 		}
 	];
 
 	const updateTeam = async (e: CustomEvent) => {
 		const { data } = e.detail;
-		const image = data[2].value;
 
-		if (!image) {
-			const formData = new FormData();
+		const formData = new FormData();
 
-			formData.append('id', team?.id + '');
-			formData.append('name', data[0].value);
-			formData.append('acronym', data[1].value);
-			formData.append('countryID', data[3].value);
-			formData.append('emblem', team?.emblem!);
+		formData.append('id', match?.id + '');
+		formData.append('tournamentID', data[0].value);
+		formData.append('localID', data[1].value);
+		formData.append('visitorID', data[2].value);
+		formData.append('phase', data[3].value);
+		formData.append('date', data[4].value);
 
-			const res = await fetch('?/update', {
-				method: 'POST',
-				body: formData
-			});
-			if (res.status === 200) {
-				toast.success('Se editó el equipo');
-				setTimeout(() => {
-					goto('/admin/teams');
-				}, 1000);
-			} else {
-				toast.error('Ocurrio un error con el servidor');
-			}
+		const res = await fetch('?/update', {
+			method: 'POST',
+			body: formData
+		});
+		if (res.status === 200) {
+			toast.success('Se editó el partido');
+			setTimeout(() => {
+				goto('/admin/matches');
+			}, 1000);
 		} else {
-			const reader = new FileReader();
-			reader.readAsDataURL(image[0]);
-			reader.onload = async (e) => {
-				const target = e.target as FileReader;
-				const FileReaderResult = target.result as string;
-				const imgData = FileReaderResult.split(',');
-
-				const formData = new FormData();
-
-				formData.append('id', team?.id + '');
-				formData.append('name', data[0].value);
-				formData.append('acronym', data[1].value);
-				formData.append('countryID', data[3].value);
-				formData.append('emblem', imgData[1]);
-
-				const res = await fetch('?/update', {
-					method: 'POST',
-					body: formData
-				});
-				if (res.status === 200) {
-					toast.success('Se editó el equipo');
-					setTimeout(() => {
-						goto('/admin/teams');
-					}, 1000);
-				} else {
-					toast.error('Ocurrio un error con el servidor');
-				}
-			};
+			console.log(res);
+			toast.error('Ocurrio un error con el servidor');
 		}
 	};
 </script>
@@ -86,11 +93,20 @@
 <main class="layout">
 	<div class="admin__section">
 		<AdminForm
-			title={`Equipo ${team?.name}`}
+			title={`Partido ${match?.Teams_Matches_localIDToTeams.name} VS ${match?.Teams_Matches_visitorIDToTeams.name}`}
 			{components}
 			submitMessage="Editar"
 			{loading}
 			on:custom-submit={updateTeam}
-		/>
+		>
+			<div slot="over-form-slot">
+				<button
+					class="aux-btn"
+					on:click={() => {
+						goto(`${match?.id}/addResult`);
+					}}>Cargar Resultado</button
+				>
+			</div>
+		</AdminForm>
 	</div>
 </main>

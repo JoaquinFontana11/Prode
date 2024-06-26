@@ -11,3 +11,18 @@
 		align-items: center;
 	}
 }
+
+.aux-btn {
+	display: flex;
+	justify-content: center;
+	margin: 0;
+	margin-bottom: 2rem;
+	color: white;
+	background-color: #4338ca;
+	border-radius: 2rem;
+	padding: 1rem 3rem;
+
+	&:hover {
+		background-color: #4031e4;
+	}
+}

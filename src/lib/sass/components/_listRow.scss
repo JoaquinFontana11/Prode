@@ -29,8 +29,14 @@
 		color: $primary-gray;
 		white-space: nowrap;
 
+		&__name {
+			font-size: $normal-font-size;
+			margin-top: 0.5rem;
+		}
+
 		&__img {
 			width: 8rem;
+			height: 5rem;
 		}
 	}
 

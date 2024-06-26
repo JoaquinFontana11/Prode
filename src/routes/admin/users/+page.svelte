@@ -7,7 +7,7 @@
 
 	export let data: PageData;
 	const users = data.users;
-	console.log(users);
+
 	const headers = ['Nombre Usuario', 'Nombre Completo', 'Rol'];
 	const attributes = ['username', 'name', 'role'];
 

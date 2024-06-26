@@ -34,15 +34,15 @@ model Predictions {
   succesMatch  Boolean @default(false)
   succesGoals  Boolean @default(false)
   userID       Int
-  predictionID Int
+  predictionID Int     @unique
   Results      Results @relation(fields: [predictionID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "prediction")
   Users        Users   @relation(fields: [userID], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user")
 }
 
 model Results {
   id                                Int           @id @default(autoincrement())
-  local                             Int?
-  visitor                           Int?
+  local                             Int
+  visitor                           Int
   penalties                         Boolean       @default(false)
   penalty_local                     Int?
   penalty_visitor                   Int?
@@ -96,6 +96,7 @@ enum Phases {
   Octavos
   Cuartos
   Semi
+  TerCua
   Final
 }
 

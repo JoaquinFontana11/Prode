@@ -174,8 +174,13 @@ button {
   color: #707070;
   white-space: nowrap;
 }
+.list-row__image__name {
+  font-size: 1.7rem;
+  margin-top: 0.5rem;
+}
 .list-row__image__img {
   width: 8rem;
+  height: 5rem;
 }
 .list-row__default {
   height: 0.5rem;
@@ -228,8 +233,13 @@ button {
 .header-box__title {
   font-size: 3rem;
 }
-.header-box__filter {
-  width: 20rem;
+.header-box__filters-box {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+.header-box__filters-box__filter {
+  width: auto;
   padding: 1rem;
   font-size: 1.3rem;
   color: black;
@@ -239,6 +249,9 @@ button {
   outline: 2px solid transparent;
   outline-offset: 2px;
   transition-duration: 300ms;
+}
+.header-box__filters-box__filter--width {
+  width: 20rem;
 }
 
 .table-list {
@@ -408,6 +421,20 @@ button {
 .admin__section--flex {
   display: flex;
   align-items: center;
+}
+
+.aux-btn {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  margin-bottom: 2rem;
+  color: white;
+  background-color: #4338ca;
+  border-radius: 2rem;
+  padding: 1rem 3rem;
+}
+.aux-btn:hover {
+  background-color: #4031e4;
 }
 
 .navbar {

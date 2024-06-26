@@ -5,32 +5,38 @@ import prisma from '$lib/prisma';
 import { createUrlImg } from '$lib/components/helpers/FormateImage';
 
 export const load: PageServerLoad = async ({ request }) => {
-	let countries = await prisma.country.findMany();
+	let teams = await prisma.teams.findMany();
 
-	countries = countries.map((country) => {
-		return { value: country.id, name: country.name };
+	teams = teams.map((team) => {
+		return { value: team.id, name: team.name };
 	});
 
-	return { countries };
+	let tournaments = await prisma.tournaments.findMany();
+
+	tournaments = tournaments.map((tournament) => {
+		return { value: tournament.id, name: tournament.name };
+	});
+
+	return { teams, tournaments };
 };
 
 export const actions = {
 	create: async ({ request }) => {
 		try {
 			const form = await request.formData();
-			console.log(request);
-			console.log(form);
 
-			const team = {
-				name: form.get('name') + '',
-				acronym: form.get('acronym') + '',
-				countryID: form.get('countryID') * 1,
-				emblem: createUrlImg(form.get('name') + '', form.get('emblem') + '', NODE_ENV, 'emblems')
+			const match = {
+				tournamentID: form.get('tournamentID') * 1,
+				localID: form.get('localID') * 1,
+				visitorID: form.get('visitorID') * 1,
+				phase: form.get('phase') + '',
+				date: new Date(form.get('date'))
 			};
-			console.log(team);
 
-			const res = await prisma.teams.create({
-				data: team
+			match.date.setHours(30);
+
+			const res = await prisma.matches.create({
+				data: match
 			});
 			return { status: 200 };
 		} catch (e) {

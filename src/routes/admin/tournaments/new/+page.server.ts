@@ -17,14 +17,11 @@ export const actions = {
 	create: async ({ request }) => {
 		try {
 			const form = await request.formData();
-			console.log(request);
-			console.log(form);
 
 			const tournament = {
 				name: form.get('name') + '',
 				active: stringToBooleanMap[form.get('active')]
 			};
-			console.log(tournament);
 
 			const res = await prisma.tournaments.create({
 				data: tournament

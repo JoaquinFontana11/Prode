@@ -12,7 +12,6 @@ export const actions = {
 	create: async ({ request }) => {
 		try {
 			const form = await request.formData();
-			console.log(form);
 
 			const user = {
 				username: form.get('username') + '',
@@ -20,7 +19,6 @@ export const actions = {
 				role: form.get('role') + '',
 				password: await hassPass(form.get('password') + '')
 			};
-			console.log(user);
 
 			const res = await prisma.users.create({
 				data: user

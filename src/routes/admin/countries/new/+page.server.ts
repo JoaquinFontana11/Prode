@@ -12,8 +12,6 @@ export const actions = {
 	create: async ({ request }) => {
 		try {
 			const form = await request.formData();
-			console.log(request);
-			console.log(form);
 
 			const country = {
 				name: form.get('name') + '',
@@ -24,7 +22,6 @@ export const actions = {
 					'flags'
 				)
 			};
-			console.log(country);
 
 			const res = await prisma.country.create({
 				data: country

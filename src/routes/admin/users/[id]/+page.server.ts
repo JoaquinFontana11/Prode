@@ -45,7 +45,5 @@ export const actions = {
 				id: id
 			}
 		});
-
-		console.log(team);
 	}
 };

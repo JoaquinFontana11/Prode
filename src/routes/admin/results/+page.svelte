@@ -3,7 +3,8 @@
 	import TableData from '$lib/components/admin/AdminTable.svelte';
 	import AdminCreateButton from '$lib/components/admin/AdminCreateButton.svelte';
 	import { goto } from '$app/navigation';
-	import { setDate } from '$lib/components/helpers/FormateDate';
+	import toast, { Toaster } from 'svelte-french-toast';
+	import { Phases } from '@prisma/client';
 
 	export let data: PageData;
 	const matches = data.matches;
@@ -22,10 +23,26 @@
 	const modifyTeam = (e: CustomEvent) => {
 		goto(`/admin/matches/${e.detail.id}`);
 	};
+
+	const deleteTeam = async (e: CustomEvent) => {
+		const res = await fetch(`matches/${e.detail.id}?/delete`, {
+			method: 'POST',
+			body: new FormData()
+		});
+		if (res.status === 200) {
+			toast.success('Se elimino el partido');
+			setTimeout(() => {
+				location.reload();
+			}, 1000);
+		} else {
+			toast.error('Ocurrio un error con el servidor');
+		}
+	};
 </script>
 
+<Toaster />
 <section class="layout">
-	<AdminCreateButton tableName="matches" />
+	<AdminCreateButton tableName="teams" />
 	<TableData
 		{headers}
 		{attributes}
@@ -41,7 +58,7 @@
 				emblem: match.Teams_Matches_visitorIDToTeams.emblem
 			},
 			phase: match.phase,
-			date: setDate(match.date),
+			date: new Date(match.date).toLocaleString('en-GB').split(',')[0],
 			result: match.Results_Results_matchIDToMatches
 		}))}
 		filterConfig={{
@@ -50,7 +67,7 @@
 			placeholder: 'Buscar un Torneo',
 			options: options
 		}}
-		actions={['edit']}
+		on:delete-doc={deleteTeam}
 		on:modify-doc={modifyTeam}
 		caption="Partidos"
 	/>

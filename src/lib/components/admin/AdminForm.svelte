@@ -26,49 +26,56 @@
 	};
 </script>
 
+<slot name="over-form-slot" />
 <form class="form-data" on:submit|preventDefault={handlerSubmit}>
 	<!-- Dejamos un slot para ampliar la funcionalidad del formulario dependiendo la necesidad -->
 	<slot name="top-slot" />
 	<legend class="form-data__title">{title}</legend>
 	{#each components as component}
-		{#if component.type == 'text'}
+		{#if component.type === 'text'}
 			<AdminFormInputText
 				label={component.label}
 				bind:value={component.value}
 				required={component.required}
 			/>
-		{:else if component.type == 'number'}
+		{:else if component.type === 'number'}
 			<AdminFormInputNumber
 				label={component.label}
 				bind:value={component.value}
 				required={component.required}
 			/>
-		{:else if component.type == 'date'}
+		{:else if component.type === 'penalty' && components[2].value}
+			<AdminFormInputNumber
+				label={component.label}
+				bind:value={component.value}
+				required={component.required}
+			/>
+		{:else if component.type === 'date'}
 			<AdminFormInputDate
 				label={component.label}
 				bind:value={component.value}
 				required={component.required}
 			/>
-		{:else if component.type == 'radio'}
+		{:else if component.type === 'radio'}
 			<AdminFormInputRadio
 				label={component.label}
 				bind:value={component.value}
 				required={component.required}
 			/>
-		{:else if component.type == 'select'}
+		{:else if component.type === 'select'}
 			<AdminFormSelect
 				label={component.label}
 				options={component.options}
 				bind:value={component.value}
 				required={component.required}
 			/>
-		{:else if component.type == 'image'}
+		{:else if component.type === 'image'}
 			<AdminFormFileImageInput
 				label={component.label}
 				bind:files={component.value}
 				required={component.required}
 			/>
-		{:else if component.type == 'editor'}
+		{:else if component.type === 'editor'}
 			<AdminFormEditor label={component.label} bind:value={component.value} />
 		{/if}
 	{/each}

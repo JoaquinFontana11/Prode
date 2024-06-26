@@ -8,10 +8,16 @@
 	export let actions: string[] = ['edit', 'delete'];
 	export let caption: string = '';
 	export let customRow: ComponentType | null = null; // podemos pasar una fila customizada si la tabla tiene que ser distinta
-	export let filterConfig: { show: boolean; placeholder: string };
-
+	export let filterConfig: {
+		showSelect: boolean;
+		showSearcher: boolean;
+		placeholder: string;
+		options: { value: string; name: string }[];
+	};
+	console.log(data);
 	const dispatch = createEventDispatcher();
-	let filter: string = '';
+	let filterSearcher: string = '';
+	let filterSelect: string = 'all';
 
 	const deleteEvent = (e: CustomEvent) => {
 		dispatch('delete-doc', { id: e.detail.id, doc: e.detail.doc });
@@ -24,14 +30,29 @@
 
 <div class="header-box">
 	<span class="header-box__title">{caption}</span>
-	{#if filterConfig.show}
-		<input
-			class="header-box__filter"
-			type="text"
-			placeholder={filterConfig.placeholder}
-			bind:value={filter}
-		/>
-	{/if}
+	<div class="header-box__filters-box">
+		{#if filterConfig.showSelect}
+			<select
+				class="header-box__filters-box__filter"
+				name="select"
+				id="select"
+				bind:value={filterSelect}
+			>
+				<option value="all">Todos</option>
+				{#each filterConfig.options as option}
+					<option value={option.value}>{option.name}</option>
+				{/each}
+			</select>
+		{/if}
+		{#if filterConfig.showSearcher}
+			<input
+				class="header-box__filters-box__filter header-box__filters-box__filter--width"
+				type="text"
+				placeholder={filterConfig.placeholder}
+				bind:value={filterSearcher}
+			/>
+		{/if}
+	</div>
 </div>
 <table class="table-list">
 	<thead class="table-list__head">
@@ -48,9 +69,17 @@
 		<th class="table-list__head__row table-list__head__row--width">Acciones</th>
 	</thead>
 	<tbody class="table-list__body">
-		{#each data.filter((d) => filterConfig.show && d.name
-					.toLowerCase()
-					.includes(filter.toLowerCase())) as doc}
+		{#each data.filter((d) => {
+			if (caption === 'Partidos') {
+				if (filterSelect === 'all') {
+					return d.tournament.toLowerCase().includes(filterSearcher.toLowerCase());
+				} else {
+					return d.phase
+							.toLowerCase()
+							.includes(filterSearcher.toLowerCase()) && filterSelect && d.phase === filterSelect;
+				}
+			} else return d.name.toLowerCase().includes(filterSearcher.toLowerCase());
+		}) as doc}
 			{#if !customRow}
 				<AdminListRow
 					{doc}
